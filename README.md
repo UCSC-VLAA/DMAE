@@ -3,7 +3,12 @@
 ## Masked Autoencoders Enable Efficient Knowledge Distillers
 
 
-This is a PyTorch implementation of the [DMAE paper](https://arxiv.org/abs/2208.12256):
+This is a PyTorch implementation of the [DMAE paper](https://arxiv.org/abs/2208.12256).
+
+<div align="center">
+  <img src="dmae_teaser.png"/>
+</div>
+
 
 ### Preparation
 
