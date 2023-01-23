@@ -4,36 +4,25 @@
 
 
 This is a PyTorch implementation of the [DMAE paper](https://arxiv.org/abs/2208.12256):
-```
-@article{bai2022masked,
-  title={Masked autoencoders enable efficient knowledge distillers},
-  author={Bai, Yutong and Wang, Zeyu and Xiao, Junfei and Wei, Chen and Wang, Huiyu and Yuille, Alan and Zhou, Yuyin and Xie, Cihang},
-  journal={arXiv preprint arXiv:2208.12256},
-  year={2022}
-}
-```
-
 
 ### Preparation
 
-Install PyTorch and ImageNet dataset following the [official PyTorch ImageNet training code](https://github.com/pytorch/examples/tree/master/imagenet). Refer to MAE official codebase for other enrironment.
+Install PyTorch and ImageNet dataset following the [official PyTorch ImageNet training code](https://github.com/pytorch/examples/tree/master/imagenet). Please refer to [MAE official codebase](https://github.com/facebookresearch/mae) for other enrironment requirements.
 
 
 
-### Unsupervised Training
+### Pre-Training
 
 This implementation only supports **multi-gpu**, **DistributedDataParallel** training, which is faster and simpler; single-gpu or DataParallel training is not supported.
 
-To do unsupervised pre-training in an 8-gpu machine,
-
-first, download the [ViT-Large model](https://drive.google.com/drive/folders/1tCdXhi_pWbRSgdUcmyOyP5mE0GMnpeC9?usp=sharing) as teacher model, and run:
+To pre-train models in an 8-gpu machine, please first download the [ViT-Large model](https://drive.google.com/drive/folders/1tCdXhi_pWbRSgdUcmyOyP5mE0GMnpeC9?usp=sharing) as the teacher model, and then run:
 ```
 bash pretrain.sh
 ```
 
 
-### Supervised Finetuning
-To do fintuning in an 8-gpu machine, run:
+### Finetuning
+To fintune models in an 8-gpu machine, run:
 
 ```
 bash finetune.sh
@@ -42,7 +31,7 @@ bash finetune.sh
 
 ### Models
 
-Our pre-trained ResNet-50 model and finetuned checkpoints on object detection can be downloaded as following:
+The checkpoints of our pre-trained and finetuned ViT-Base on ImageNet-1k can be downloaded as following:
 
 
 |             |                                          Pretrained Model                                           | Epoch | 
@@ -58,6 +47,21 @@ Our pre-trained ResNet-50 model and finetuned checkpoints on object detection ca
 
 
 
+
 ### License
 
 This project is under the CC-BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
+
+
+
+
+### Citation
+
+```
+@article{bai2022masked,
+  title={Masked autoencoders enable efficient knowledge distillers},
+  author={Bai, Yutong and Wang, Zeyu and Xiao, Junfei and Wei, Chen and Wang, Huiyu and Yuille, Alan and Zhou, Yuyin and Xie, Cihang},
+  journal={arXiv preprint arXiv:2208.12256},
+  year={2022}
+}
+```
