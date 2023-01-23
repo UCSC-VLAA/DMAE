@@ -26,7 +26,7 @@ This implementation only supports **multi-gpu**, **DistributedDataParallel** tra
 
 To do unsupervised pre-training in an 8-gpu machine,
 
-first, download the [ViT-Large model]((https://drive.google.com/drive/folders/1tCdXhi_pWbRSgdUcmyOyP5mE0GMnpeC9?usp=sharing)) as teacher model, and run:
+first, download the [ViT-Large model](https://drive.google.com/drive/folders/1tCdXhi_pWbRSgdUcmyOyP5mE0GMnpeC9?usp=sharing) as teacher model, and run:
 ```
 bash pretrain.sh
 ```
