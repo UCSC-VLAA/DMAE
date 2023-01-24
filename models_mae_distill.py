@@ -1,14 +1,3 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-# --------------------------------------------------------
-# References:
-# timm: https://github.com/rwightman/pytorch-image-models/tree/master/timm
-# DeiT: https://github.com/facebookresearch/deit
-# --------------------------------------------------------
-
 from functools import partial
 
 import torch
@@ -254,13 +243,10 @@ class MaskedAutoencoderViT(nn.Module):
         # embed patches
         x = self.patch_embed(x)
 
-        # add pos embed w/o cls token
         x = x + self.pos_embed[:, 1:, :]
 
-        # masking: length -> length * mask_ratio
         x, mask, ids_restore, ids_keep = self.random_masking_customized(x, mask_ratio)
 
-        # append cls token
         cls_token = self.cls_token + self.pos_embed[:, :1, :]
         cls_tokens = cls_token.expand(x.shape[0], -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
@@ -392,11 +378,6 @@ class MaskedAutoencoderViT(nn.Module):
         pred: [N, L, p*p*3]
         mask: [N, L], 0 is keep, 1 is remove,
         """
-        # target = self.patchify(imgs)
-        # if self.norm_pix_loss:
-        #     mean = target.mean(dim=-1, keepdim=True)
-        #     var = target.var(dim=-1, keepdim=True)
-        #     target = (target - mean) / (var + 1.e-6)**.5
         assert isinstance(features_teacher, list) and isinstance(features_student, list)
         assert len(features_teacher) == len(features_student)
         loss_distillation_embedding = dict()
@@ -420,11 +401,6 @@ class MaskedAutoencoderViT(nn.Module):
         pred: [N, L, p*p*3]
         mask: [N, L], 0 is keep, 1 is remove,
         """
-        # target = self.patchify(imgs)
-        # if self.norm_pix_loss:
-        #     mean = target.mean(dim=-1, keepdim=True)
-        #     var = target.var(dim=-1, keepdim=True)
-        #     target = (target - mean) / (var + 1.e-6)**.5
 
         loss = (pred - teacher_pred) ** 2
         loss = loss.mean(dim=-1)  # [N, L], mean loss per patch
@@ -500,40 +476,19 @@ class MaskedAutoencoderViT(nn.Module):
 
     def forward(self, imgs, ids_keep, ids_restore, mask, teacher_prediction, target_sum_weights=None,
                 latents_teacher=None):
-        if self.aligned_blks_indices is None:
-            latent = self.forward_encoder_student(imgs, ids_keep)
-            pred = self.forward_decoder(latent, ids_restore)  # [N, L, p*p*3]
-            if self.student_reconstruction_target == 'original_img':
-                loss = self.forward_loss(imgs, pred, mask)
-            elif self.student_reconstruction_target == 'original_teacher_pred_weighted_sum':
-                loss = self.forward_loss_student_weighted_sum(imgs, teacher_prediction, pred, mask, target_sum_weights)
-            else:
-                raise NotImplementedError
-            return loss, pred, mask
-        else:
-            assert latents_teacher is not None
-            latents = self.forward_encoder_student(imgs, ids_keep)
-            pred = self.forward_decoder(latents[-1], ids_restore)  # [N, L, p*p*3]
 
-            # if len(latents_teacher) == 2:
-            #     loss_distillation_embedding = self.forward_distillation_loss_embedding([latents_teacher[:-1]],
-            #                                                                            [latents[:-1]])
-            # else:
-            loss_distillation_embedding = self.forward_distillation_loss_embedding(latents_teacher[:-1],
-                                                                                       latents[:-1])
-            if self.student_reconstruction_target == 'original_img':
-                loss = self.forward_loss(imgs, pred, mask)
-            elif self.student_reconstruction_target == 'teacher_prediction':
-                loss = self.forward_loss_student(teacher_prediction, pred, mask)
-            elif self.student_reconstruction_target == 'none':
-                loss = torch.tensor(0, device=pred.device)
-            else:
-                raise NotImplementedError
-            return loss, loss_distillation_embedding, pred, mask
-        # latent, mask, ids_restore = self.forward_encoder(imgs, mask_ratio)
-        # pred = self.forward_decoder(latent, ids_restore)  # [N, L, p*p*3]
-        # loss = self.forward_loss(imgs, pred, mask)
-        # return loss, pred, mask
+        assert latents_teacher is not None
+        latents = self.forward_encoder_student(imgs, ids_keep)
+        pred = self.forward_decoder(latents[-1], ids_restore)  # [N, L, p*p*3]
+
+
+        loss_distillation_embedding = self.forward_distillation_loss_embedding(latents_teacher[:-1],
+                                                                                    latents[:-1])
+        if self.student_reconstruction_target == 'original_img':
+            loss = self.forward_loss(imgs, pred, mask)
+        else:
+            raise NotImplementedError
+        return loss, loss_distillation_embedding, pred, mask
 
 
 def mae_vit_small_patch16_dec512d2b(**kwargs):
@@ -583,13 +538,6 @@ def mae_vit_huge_patch14_dec512d8b(**kwargs):
         mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     return model
 
-
-def mae_vit_base_patch14_dec512d8b(**kwargs):
-    model = MaskedAutoencoderViT(
-        patch_size=14, embed_dim=768, depth=12, num_heads=12,
-        decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
-        mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    return model
 
 
 

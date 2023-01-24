@@ -1,13 +1,3 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-# --------------------------------------------------------
-# References:
-# DeiT: https://github.com/facebookresearch/deit
-# BEiT: https://github.com/microsoft/unilm/tree/master/beit
-# --------------------------------------------------------
 import argparse
 import datetime
 import json
@@ -68,7 +58,7 @@ def get_args_parser():
     parser.add_argument('--min_lr', type=float, default=0., metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0')
 
-    parser.add_argument('--warmup_epochs', type=int, default=40, metavar='N',
+    parser.add_argument('--warmup_epochs', type=int, default=20, metavar='N',
                         help='epochs to warmup LR')
 
     # Dataset parameters
@@ -149,7 +139,6 @@ def main(args):
 
     device = torch.device(args.device)
 
-    # fix the seed for reproducibility
     seed = args.seed + misc.get_rank()
     torch.manual_seed(seed)
     np.random.seed(seed)

@@ -1,14 +1,3 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-# --------------------------------------------------------
-# References:
-# DeiT: https://github.com/facebookresearch/deit
-# BEiT: https://github.com/microsoft/unilm/tree/master/beit
-# --------------------------------------------------------
-
 import argparse
 import datetime
 import json
@@ -54,8 +43,8 @@ def get_args_parser():
     parser.add_argument('--input_size', default=224, type=int,
                         help='images input size')
 
-    parser.add_argument('--drop_path', type=float, default=0.1, metavar='PCT',
-                        help='Drop path rate (default: 0.1)')
+    parser.add_argument('--drop_path', type=float, default=0.15, metavar='PCT',
+                        help='Drop path rate (default: 0.15)')
 
     # Optimizer parameters
     parser.add_argument('--clip_grad', type=float, default=None, metavar='NORM',
@@ -67,13 +56,13 @@ def get_args_parser():
                         help='learning rate (absolute lr)')
     parser.add_argument('--blr', type=float, default=1e-3, metavar='LR',
                         help='base learning rate: absolute_lr = base_lr * total_batch_size / 256')
-    parser.add_argument('--layer_decay', type=float, default=0.7,
+    parser.add_argument('--layer_decay', type=float, default=0.75,
                         help='layer-wise lr decay from ELECTRA/BEiT')
 
     parser.add_argument('--min_lr', type=float, default=1e-6, metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0')
 
-    parser.add_argument('--warmup_epochs', type=int, default=5, metavar='N',
+    parser.add_argument('--warmup_epochs', type=int, default=20, metavar='N',
                         help='epochs to warmup LR')
 
     # Augmentation parameters

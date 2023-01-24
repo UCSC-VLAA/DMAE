@@ -1,14 +1,3 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-# --------------------------------------------------------
-# References:
-# DeiT: https://github.com/facebookresearch/deit
-# BEiT: https://github.com/microsoft/unilm/tree/master/beit
-# --------------------------------------------------------
-
 import math
 import sys
 from typing import Iterable, Optional
@@ -101,8 +90,6 @@ def evaluate(data_loader, model, device):
 
     metric_logger = misc.MetricLogger(delimiter="  ")
     header = 'Test:'
-
-    # switch to evaluation mode
     model.eval()
 
     for batch in metric_logger.log_every(data_loader, 10, header):
@@ -111,7 +98,6 @@ def evaluate(data_loader, model, device):
         images = images.to(device, non_blocking=True)
         target = target.to(device, non_blocking=True)
 
-        # compute output
         with torch.cuda.amp.autocast():
             output = model(images)
             loss = criterion(output, target)
