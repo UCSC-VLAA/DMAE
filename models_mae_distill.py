@@ -255,15 +255,15 @@ class MaskedAutoencoderViT(nn.Module):
         # apply Transformer blocks
         for i, blk in enumerate(self.blocks):
             x = blk(x)
-            x = x.clone().to(torch.float32)
             if i == len(self.blocks) - 1 and self.aligned_blks_indices is None:
                 x = self.norm(x)
-
             if self.aligned_blks_indices is not None:
                 if i in self.aligned_blks_indices:
+                    x = x.clone().to(torch.float32)
                     outs.append(x)
                 if i == len(self.blocks) - 1:
                     x = self.norm(x)
+                    x = x.clone().to(torch.float32)
                     outs.append(x)
 
         if self.aligned_blks_indices is None:
