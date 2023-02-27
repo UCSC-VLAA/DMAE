@@ -63,10 +63,10 @@ This project is under the CC-BY-NC 4.0 license. See [LICENSE](LICENSE) for detai
 ### Citation
 
 ```
-@article{bai2022masked,
-  title={Masked autoencoders enable efficient knowledge distillers},
-  author={Bai, Yutong and Wang, Zeyu and Xiao, Junfei and Wei, Chen and Wang, Huiyu and Yuille, Alan and Zhou, Yuyin and Xie, Cihang},
-  journal={arXiv preprint arXiv:2208.12256},
-  year={2022}
+@inproceedings{bai2022masked,
+  title     = {Masked autoencoders enable efficient knowledge distillers},
+  author    = {Bai, Yutong and Wang, Zeyu and Xiao, Junfei and Wei, Chen and Wang, Huiyu and Yuille, Alan and Zhou, Yuyin and Xie, Cihang},
+  booktitle = {CVPR},
+  year      = {2023}
 }
 ```
