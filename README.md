@@ -59,6 +59,11 @@ This project is under the CC-BY-NC 4.0 license. See [LICENSE](LICENSE) for detai
 
 
 
+### Acknowledgment
+
+This work is partially supported by TPU Research Cloud (TRC) program, and Google Cloud Research Credits program.
+
+
 
 ### Citation
 
